@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>ChatGPT 本地备份库</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body class="vault-body">
+    <div class="vault-shell">
+      <header class="vault-header">
+        <div class="brand">
+          <span class="brand-mark">B</span>
+          <div>
+            <h1 id="vaultTitle">备份库</h1>
+            <p id="vaultStats" class="small muted">正在加载本地备份</p>
+          </div>
+        </div>
+        <div class="vault-toolbar">
+          <label class="language-row compact">
+            <span id="languageLabel">语言</span>
+            <select id="localeSelect">
+              <option value="zh">中文</option>
+              <option value="en">English</option>
+            </select>
+          </label>
+          <button id="exportAllMarkdown">导出全部 Markdown</button>
+          <button id="exportAllJson">导出全部 JSON</button>
+          <button id="clearAll" class="danger">清空全部</button>
+        </div>
+      </header>
+
+      <main class="vault-main">
+        <aside class="sidebar">
+          <div class="search-row">
+            <input id="searchInput" type="search" placeholder="搜索会话" autocomplete="off">
+          </div>
+          <div id="conversationList" class="conversation-list" aria-label="Saved conversations"></div>
+        </aside>
+
+        <section id="reader" class="reader">
+          <div class="empty-state">
+            <div>
+              <h2>No conversation selected</h2>
+              <p id="emptyHint" class="small">打开 ChatGPT 并开始聊天，本地备份会出现在这里。</p>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+    <div id="toast" class="toast" role="status"></div>
+
+    <script src="i18n.js"></script>
+    <script src="db.js"></script>
+    <script src="export.js"></script>
+    <script src="vault.js"></script>
+  </body>
+</html>

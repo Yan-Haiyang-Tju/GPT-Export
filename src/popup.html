@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>ChatGPT 本地备份</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body class="popup-body">
+    <main class="popup">
+      <header class="popup-header">
+        <div class="brand">
+          <span class="brand-mark">B</span>
+          <div>
+            <h1 id="popupTitle">本地备份</h1>
+            <p id="popupSubtitle" class="small muted">ChatGPT 会话</p>
+          </div>
+        </div>
+        <button id="openVault" class="icon" title="打开备份库" aria-label="打开备份库">↗</button>
+      </header>
+      <label class="language-row">
+        <span id="languageLabel">语言</span>
+        <select id="localeSelect">
+          <option value="zh">中文</option>
+          <option value="en">English</option>
+        </select>
+      </label>
+
+      <section class="status-panel" aria-live="polite">
+        <div class="status-line">
+          <h2 id="currentPageHeading">当前页面</h2>
+          <span id="pageStatus" class="pill warn">检查中</span>
+        </div>
+        <p id="pageTitle" class="small muted">打开 ChatGPT 会话即可开始备份。</p>
+        <label class="toggle-row">
+          <input id="backupEnabled" type="checkbox">
+          <span id="autoBackupLabel">自动备份当前可见的 ChatGPT 会话</span>
+        </label>
+        <div class="actions">
+          <button id="saveNow" class="primary">立即保存</button>
+          <button id="exportCurrent">导出当前</button>
+        </div>
+      </section>
+
+      <section class="stats-grid" aria-label="Local backup stats">
+        <div class="stat">
+          <strong id="conversationCount">0</strong>
+          <span id="conversationLabel" class="small muted">会话</span>
+        </div>
+        <div class="stat">
+          <strong id="messageCount">0</strong>
+          <span id="messageLabel" class="small muted">消息</span>
+        </div>
+      </section>
+
+      <section class="status-panel">
+        <h2 id="lastBackupHeading">最近备份</h2>
+        <p id="lastBackup" class="small muted">还没有本地备份。</p>
+        <div class="actions">
+          <button id="exportAllJson">导出全部 JSON</button>
+        </div>
+      </section>
+    </main>
+
+    <script src="i18n.js"></script>
+    <script src="db.js"></script>
+    <script src="export.js"></script>
+    <script src="popup.js"></script>
+  </body>
+</html>
