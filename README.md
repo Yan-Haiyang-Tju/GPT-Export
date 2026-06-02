@@ -1,6 +1,6 @@
 <div align="center">
 
-# ChatGPT 本地备份
+# ChatExport
 
 ### Local-first ChatGPT conversation backup extension for Chrome / Edge
 
@@ -17,7 +17,7 @@
 
 <br>
 
-![插件界面](pic/popup.png)
+<img src="icons/icon.png" alt="ChatExport icon" width="180">
 
 </div>
 
@@ -27,7 +27,7 @@
 
 ### ✨ 它能做什么
 
-ChatGPT 本地备份是一个 **Chrome / Edge 浏览器扩展**。安装后，它会在你打开 `chatgpt.com` 或 `chat.openai.com` 时，自动备份当前页面中可见的聊天内容到浏览器本地 IndexedDB。
+ChatExport 是一个 **Chrome / Edge 浏览器扩展**。安装后，它会在你打开 `chatgpt.com` 或 `chat.openai.com` 时，自动备份当前页面中可见的聊天内容到浏览器本地 IndexedDB。
 
 它重点解决一个很具体的问题：
 
@@ -218,7 +218,7 @@ git pull
 卸载扩展：
 
 1. 打开 `chrome://extensions` 或 `edge://extensions`。
-2. 找到 `ChatGPT 本地备份`。
+2. 找到 `ChatExport`。
 3. 点击 `Remove / 删除`。
 
 > 卸载扩展可能会同时清除扩展本地数据。卸载前建议先导出 JSON 备份。
@@ -274,7 +274,7 @@ pic/
 
 ### ✨ What It Does
 
-ChatGPT Local Backup is a **Chrome / Edge browser extension**. It automatically backs up the currently visible ChatGPT conversation into browser IndexedDB, then lets you view, search, and export saved conversations.
+ChatExport is a **Chrome / Edge browser extension**. It automatically backs up the currently visible ChatGPT conversation into browser IndexedDB, then lets you view, search, and export saved conversations.
 
 It is designed for one practical problem:
 
@@ -466,7 +466,7 @@ To clear local backup data:
 To uninstall the extension:
 
 1. Open `chrome://extensions` or `edge://extensions`.
-2. Find `ChatGPT Local Backup`.
+2. Find `ChatExport`.
 3. Click `Remove`.
 
 > Uninstalling the extension may also remove its local browser data. Export JSON first if you need a permanent backup.
@@ -514,4 +514,10 @@ src/
 pic/
   popup.png
   vault.png
+icons/
+  icon.png
+  icon-16.png
+  icon-32.png
+  icon-48.png
+  icon-128.png
 ```

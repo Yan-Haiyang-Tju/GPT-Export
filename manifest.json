@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "ChatGPT 本地备份",
+  "name": "ChatExport",
   "version": "0.1.0",
-  "description": "将当前可见的 ChatGPT 会话备份到浏览器本地存储，并支持导出 Markdown 或 JSON。",
+  "description": "A local-first extension for backing up visible ChatGPT conversations, files, and exports.",
   "permissions": [
     "activeTab",
     "downloads",
@@ -34,8 +34,14 @@
     }
   ],
   "action": {
-    "default_title": "ChatGPT 本地备份",
+    "default_title": "ChatExport",
     "default_popup": "src/popup.html"
+  },
+  "icons": {
+    "16": "icons/icon-16.png",
+    "32": "icons/icon-32.png",
+    "48": "icons/icon-48.png",
+    "128": "icons/icon-128.png"
   },
   "options_page": "src/vault.html"
 }

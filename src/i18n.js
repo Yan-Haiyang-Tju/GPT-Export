@@ -5,8 +5,8 @@
 
   const messages = {
     zh: {
-      appName: "ChatGPT 本地备份",
-      appShortName: "本地备份",
+      appName: "ChatExport",
+      appShortName: "ChatExport",
       backupLibrary: "备份库",
       backupLibraryLoading: "正在加载本地备份",
       backupLibraryStats: "{conversations} 个会话 · {messages} 条消息 · 仅本地保存",
@@ -83,8 +83,8 @@
       markdownStatus: "状态"
     },
     en: {
-      appName: "ChatGPT Local Backup",
-      appShortName: "Local Backup",
+      appName: "ChatExport",
+      appShortName: "ChatExport",
       backupLibrary: "Backup Library",
       backupLibraryLoading: "Loading local backups",
       backupLibraryStats: "{conversations} conversations · {messages} messages · local only",

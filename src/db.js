@@ -409,7 +409,7 @@
 
     return {
       exportedAt: nowIso(),
-      app: "ChatGPT Local Backup",
+      app: "ChatExport",
       version: 2,
       conversations: result
     };

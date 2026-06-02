@@ -123,6 +123,14 @@ textarea:focus {
   font-weight: 800;
 }
 
+.brand-logo {
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  object-fit: cover;
+  box-shadow: 0 2px 8px rgba(15, 118, 110, 0.18);
+}
+
 h1,
 h2,
 h3 {
