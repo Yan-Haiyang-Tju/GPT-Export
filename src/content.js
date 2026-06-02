@@ -13,7 +13,7 @@
   const SUPPORTED_HOSTS = new Set(["chatgpt.com", "chat.openai.com"]);
   const MAX_IMAGE_BYTES = 8 * 1024 * 1024;
   const MAX_UPLOAD_BYTES = 50 * 1024 * 1024;
-  const MIN_PAGE_IMAGE_AREA = 80 * 80;
+  const MIN_PAGE_IMAGE_AREA = 240 * 240;
   const uploadedFileBackups = new Map();
 
   let saveTimer = null;
@@ -293,7 +293,12 @@
   }
 
   function looksLikeBackupImageUrl(value) {
-    return /(\.(png|jpe?g|webp|gif)(\?|#|$)|oaiusercontent|oaistatic|openai|amazonaws|blob\.core\.windows\.net)/i.test(String(value || ""));
+    return /(oaiusercontent|oaistatic|files\.oaiusercontent|oaidalleapiprodscus|oaidalleapiprod|dalle|blob\.core\.windows\.net)/i.test(String(value || ""));
+  }
+
+  function shouldIgnoreImageUrl(value) {
+    const url = String(value || "");
+    return /cdn\.auth0\.com\/avatars|google\.com\/s2\/favicons|favicon|\/avatar|gravatar|profile|developers\.openai\.com/i.test(url);
   }
 
   function collectPageImageAttachments() {
@@ -302,7 +307,7 @@
 
     function addAttachment(attachment) {
       const src = attachment.src || attachment.href;
-      if (!src || seen.has(src) || src.startsWith("data:image/svg")) {
+      if (!src || seen.has(src) || src.startsWith("data:image/svg") || shouldIgnoreImageUrl(src)) {
         return;
       }
       seen.add(src);
@@ -323,7 +328,7 @@
       );
       const area = Math.max(rect.width, image.naturalWidth || 0) * Math.max(rect.height, image.naturalHeight || 0);
 
-      if (area < MIN_PAGE_IMAGE_AREA && !looksLikeBackupImageUrl(src)) {
+      if (shouldIgnoreImageUrl(src) || area < MIN_PAGE_IMAGE_AREA || !looksLikeBackupImageUrl(src)) {
         return;
       }
 
@@ -342,7 +347,7 @@
 
     Array.from(document.querySelectorAll("a[href]")).forEach((link, index) => {
       const href = absoluteUrl(link.href || link.getAttribute("href"));
-      if (!looksLikeBackupImageUrl(href)) {
+      if (shouldIgnoreImageUrl(href) || !looksLikeBackupImageUrl(href)) {
         return;
       }
 
@@ -364,7 +369,7 @@
 
       const rect = element.getBoundingClientRect();
       const src = absoluteUrl(urlFromCssBackground(getComputedStyle(element).backgroundImage));
-      if (!src || (rect.width * rect.height < MIN_PAGE_IMAGE_AREA && !looksLikeBackupImageUrl(src))) {
+      if (!src || shouldIgnoreImageUrl(src) || rect.width * rect.height < MIN_PAGE_IMAGE_AREA || !looksLikeBackupImageUrl(src)) {
         return;
       }
 
@@ -416,15 +421,17 @@
       .map((link, index) => {
         const href = absoluteUrl(link.href || link.getAttribute("href"));
         const text = stripNoise(link.innerText || link.textContent || "");
-        const looksLikeFile = /\.(pdf|docx?|xlsx?|pptx?|csv|zip|txt|json|md|png|jpe?g|webp|gif|mp4|mov|mp3|wav)(\?|#|$)/i.test(href) ||
-          /download|attachment|file/i.test(href + " " + text);
+        const hasFileExtension = /\.(pdf|docx?|xlsx?|pptx?|csv|zip|txt|json|md|png|jpe?g|webp|gif|mp4|mov|mp3|wav)(\?|#|$)/i.test(href);
+        const hasDownloadIntent = /download|attachment|file|下载|附件/i.test(href + " " + text);
+        const isOpenAiImage = looksLikeBackupImageUrl(href);
+        const looksLikeFile = !shouldIgnoreImageUrl(href) && (hasFileExtension || hasDownloadIntent || isOpenAiImage);
 
         if (!looksLikeFile) {
           return null;
         }
 
         return {
-          type: /\.(png|jpe?g|webp|gif)(\?|#|$)/i.test(href) ? "image" : "file",
+          type: /\.(png|jpe?g|webp|gif)(\?|#|$)/i.test(href) || isOpenAiImage ? "image" : "file",
           source: role === "user" ? "user_visible_link" : "assistant_visible_link",
           name: text || filenameFromUrl(href, `file-${messageIndex + 1}-${index + 1}`),
           href,

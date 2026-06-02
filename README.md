@@ -10,6 +10,16 @@
 
 默认界面语言是中文。你可以在插件弹窗或备份库中切换中文和 English。
 
+### 界面预览
+
+插件弹窗：
+
+![插件界面](pic/插件界面.png)
+
+备份库主界面：
+
+![主界面](pic/主界面.png)
+
 ### 功能特性
 
 - 监听 `chatgpt.com` 和 `chat.openai.com` 页面。
@@ -138,6 +148,16 @@ src/
 A local-first Chrome / Edge browser extension that automatically backs up the currently visible ChatGPT conversation into browser IndexedDB, then lets you view, search, and export saved conversations.
 
 The default interface language is Chinese. You can switch between Chinese and English from the extension popup or the backup library.
+
+### Interface Preview
+
+Extension popup:
+
+![Extension popup](pic/插件界面.png)
+
+Backup library:
+
+![Backup library](pic/主界面.png)
 
 ### Features
 
