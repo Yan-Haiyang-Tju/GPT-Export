@@ -1,14 +1,31 @@
+<div align="center">
+
 # ChatGPT 本地备份 / ChatGPT Local Backup
 
-**Language / 语言**: [简体中文](#简体中文) | [English](#english)
+一个本地优先的 Chrome / Edge 扩展，用于自动备份当前可见的 ChatGPT 会话，并支持本地查看、搜索和导出。
+
+**语言 / Language**: [简体中文](#简体中文) | [English](#english)
+
+![插件界面](pic/插件界面.png)
+
+</div>
 
 ---
 
 ## 简体中文
 
-一个本地优先的 Chrome / Edge 浏览器扩展，用于把当前可见的 ChatGPT 会话自动备份到浏览器本地 IndexedDB，并支持查看、搜索和导出。
+### 项目简介
 
-默认界面语言是中文。你可以在插件弹窗或备份库中切换中文和 English。
+ChatGPT 本地备份是一个浏览器扩展。安装后，它会在你打开 `chatgpt.com` 或 `chat.openai.com` 时，自动备份当前页面中可见的聊天内容到浏览器本地 IndexedDB。
+
+它适合用来降低以下风险：
+
+- 账号异常、封禁或无法访问后，重要聊天记录丢失。
+- 手动导出不及时，导致近期会话没有备份。
+- 误删会话后无法找回。
+- 希望把重要 ChatGPT 对话导出为 Markdown / JSON 做长期归档。
+
+> 默认只保存到本地浏览器配置中，不会上传到云端。
 
 ### 界面预览
 
@@ -22,55 +39,89 @@
 
 ### 功能特性
 
-- 监听 `chatgpt.com` 和 `chat.openai.com` 页面。
-- 自动保存当前页面可见的用户消息和 ChatGPT 回复。
+- 自动监听 `chatgpt.com` 和 `chat.openai.com` 页面。
+- 自动保存当前可见的用户消息和 ChatGPT 回复。
 - ChatGPT 回复生成过程中会持续更新本地草稿。
-- 从插件弹窗打开本地备份库。
-- 查看、搜索、收藏、删除本地备份会话。
-- 单个会话可导出为 Markdown 或 JSON。
-- 全部本地备份可批量导出为 Markdown 或 JSON。
+- 打开历史会话时，可备份页面中已经加载出来的内容。
+- 提供本地备份库，可查看、搜索、收藏、删除会话。
+- 支持单个会话导出 Markdown / JSON。
+- 支持全部备份批量导出 Markdown / JSON。
 - 保存页面中可见图片、文件链接和上传文件的元信息。
-- 尝试把 ChatGPT 回复中可直接读取的图片保存成本地副本，包括常见 GPT Image 生成图。
+- 尝试把可直接读取的 ChatGPT 回复图片保存成本地副本。
 - 可选备份你上传的文件内容，默认关闭，单个文件上限 50MB。
 - 支持中文和英文界面，默认中文。
 - 不读取 cookies、密码、token 或浏览器历史记录。
 - 不调用 ChatGPT 私有接口。
 - 不在后台自动批量爬取历史会话。
 
-### Chrome 安装方式
+### 下载方式
 
-1. 打开 `chrome://extensions`。
-2. 开启 `Developer mode / 开发者模式`。
-3. 点击 `Load unpacked / 加载已解压的扩展程序`。
-4. 选择本项目文件夹：
+#### 方式一：下载 ZIP，适合普通用户
+
+1. 打开项目 GitHub 页面：
 
    ```text
-   d:\chat_export\chatgpt-backup-extension
+   https://github.com/Yan-Haiyang-Tju/GPT-Export
    ```
 
-5. 打开 `https://chatgpt.com`，开始新会话或打开已有会话。
-6. 点击浏览器右上角插件图标，查看备份状态或打开备份库。
-7. 使用弹窗里的开关暂停或恢复自动备份。
-8. 使用语言选择器在中文和英文之间切换。
+2. 点击页面右上方的 `Code`。
+3. 点击 `Download ZIP`。
+4. 下载完成后解压 ZIP 文件。
+5. 找到解压后的项目目录，目录中应该能看到：
+
+   ```text
+   manifest.json
+   src/
+   pic/
+   README.md
+   ```
+
+后续安装时，请选择这个**包含 `manifest.json` 的目录**。
+
+#### 方式二：使用 Git，适合开发者
+
+```shell
+git clone https://github.com/Yan-Haiyang-Tju/GPT-Export.git
+cd GPT-Export
+```
+
+后续安装时，请选择 `GPT-Export` 这个目录。
+
+### Chrome 安装方式
+
+1. 打开 Chrome。
+2. 在地址栏输入：
+
+   ```text
+   chrome://extensions
+   ```
+
+3. 打开右上角的 `Developer mode / 开发者模式`。
+4. 点击 `Load unpacked / 加载已解压的扩展程序`。
+5. 选择你下载或克隆后的项目目录，也就是包含 `manifest.json` 的目录。
+6. 安装成功后，浏览器右上角会出现扩展图标。
+7. 打开 `https://chatgpt.com`，开始新会话或打开已有会话。
 
 ### Edge 安装方式
 
-1. 打开 `edge://extensions`。
-2. 开启 `Developer mode / 开发者模式`。
-3. 点击 `Load unpacked / 加载已解压的扩展程序`。
-4. 选择本项目文件夹：
+1. 打开 Microsoft Edge。
+2. 在地址栏输入：
 
    ```text
-   d:\chat_export\chatgpt-backup-extension
+   edge://extensions
    ```
 
-5. 打开 `https://chatgpt.com` 并正常使用。
-6. 使用弹窗里的开关暂停或恢复自动备份。
-7. 使用语言选择器在中文和英文之间切换。
+3. 打开左侧或右侧的 `Developer mode / 开发者模式`。
+4. 点击 `Load unpacked / 加载已解压的扩展程序`。
+5. 选择你下载或克隆后的项目目录，也就是包含 `manifest.json` 的目录。
+6. 安装成功后，浏览器右上角会出现扩展图标。
+7. 打开 `https://chatgpt.com` 并正常使用。
 
-### 使用方式
+### 使用流程
 
-安装后，打开 ChatGPT 会话页面即可自动备份当前可见内容。页面右下角会显示备份状态，例如：
+#### 1. 开启自动备份
+
+安装扩展后，打开 ChatGPT 会话页面。页面右下角会出现备份状态，例如：
 
 ```text
 备份：监听中
@@ -79,24 +130,89 @@
 备份：已保存 6 条消息，2 个附件
 ```
 
-你也可以点击插件图标：
+默认情况下，`自动备份当前可见的 ChatGPT 会话` 是开启的。
 
-- 查看当前页面是否已识别。
-- 手动点击 `立即保存`。
-- 导出当前会话。
-- 打开备份库。
-- 暂停或恢复自动备份。
-- 开启或关闭 `备份我上传的文件内容`。
+#### 2. 查看插件状态
 
-### 图片和文件备份
+点击浏览器右上角的扩展图标，可以看到：
 
-当前版本支持三类附件能力：
+- 当前页面是否已识别。
+- 自动备份开关。
+- 上传文件内容备份开关。
+- 当前已保存的会话数量、消息数量、附件数量。
+- 最近一次备份时间。
+- `立即保存` 按钮。
+- `导出当前` 按钮。
+- 进入备份库的按钮。
 
-1. **附件元信息**：默认保存页面中可见图片、文件链接、上传文件的文件名、类型、大小等信息。
-2. **GPT 生成图片本地副本**：如果 ChatGPT 回复中的图片地址可直接读取，插件会尝试通过后台下载通道保存到本地 IndexedDB。
-3. **上传文件内容备份**：默认关闭。开启后，当你选择上传文件时，插件会读取并保存文件内容，单个文件上限 50MB。
+#### 3. 备份历史会话
 
-出于隐私考虑，上传文件内容备份不会默认开启。你可以在插件弹窗里手动打开或关闭。
+插件不会后台批量爬取所有历史会话。  
+如果你想备份某个历史会话，请手动打开该会话，等待内容加载完成，插件会保存当前页面中可见的内容。
+
+#### 4. 备份上传文件
+
+上传文件内容备份默认关闭。
+
+如需保存你上传的文件本体：
+
+1. 先点击扩展图标。
+2. 打开 `备份我上传的文件内容`。
+3. 再去 ChatGPT 页面选择并上传文件。
+
+说明：
+
+- 单个上传文件上限为 50MB。
+- 如果未开启该开关，插件只保存文件名、大小、类型等元信息。
+- 如果先上传文件再开启开关，已经上传过的文件不会被回头读取，需要重新选择上传。
+
+#### 5. 打开备份库
+
+点击插件弹窗右上角的箭头按钮，可以打开备份库。
+
+备份库中可以：
+
+- 查看所有已备份会话。
+- 搜索会话。
+- 收藏重要会话。
+- 删除本地备份。
+- 下载已保存的附件副本。
+- 导出单个会话为 Markdown / JSON。
+- 导出全部会话为 Markdown / JSON。
+
+### 更新到最新版
+
+#### ZIP 用户
+
+1. 到 GitHub 页面重新点击 `Code` -> `Download ZIP`。
+2. 解压新的 ZIP。
+3. 在 `chrome://extensions` 或 `edge://extensions` 中找到本扩展。
+4. 点击扩展卡片上的刷新按钮。
+5. 如果你更换了解压目录，需要重新点击 `Load unpacked` 并选择新的项目目录。
+
+#### Git 用户
+
+```shell
+cd GPT-Export
+git pull
+```
+
+然后回到 `chrome://extensions` 或 `edge://extensions`，点击扩展卡片上的刷新按钮。
+
+### 卸载和清理数据
+
+如需删除本地备份数据：
+
+1. 打开备份库。
+2. 点击 `清空全部`。
+
+如需卸载扩展：
+
+1. 打开 `chrome://extensions` 或 `edge://extensions`。
+2. 找到 `ChatGPT 本地备份`。
+3. 点击 `Remove / 删除`。
+
+> 卸载扩展可能会同时清除该扩展在浏览器中的本地数据。卸载前建议先导出 JSON 备份。
 
 ### 当前限制
 
@@ -104,8 +220,9 @@
 - 历史会话需要你手动打开，且内容已经加载到页面中，插件才能备份。
 - 如果账号已经无法访问，且某些会话此前从未备份过，插件无法恢复这些内容。
 - ChatGPT 页面结构变化后，可能需要更新 `src/content.js`。
-- 文件下载链接如果需要账号权限或已经过期，插件可能只能保存元信息，无法保存文件内容。
+- 文件下载链接如果需要账号权限或已经过期，插件可能只能保存元信息。
 - 图片地址如果需要额外账号权限、已经过期、无法直接读取或文件过大，插件可能只能保存元信息。
+- GPT Image 生成图目前不保证总能保存本体。
 - Canvas、语音等内容暂不完整支持。
 
 ### 隐私说明
@@ -122,8 +239,6 @@
 
 上传文件内容备份默认关闭。开启后，插件只会在你选择上传文件时读取文件内容，并保存到当前浏览器本地 IndexedDB。
 
-如需删除本地数据，请打开备份库并点击 `清空全部`。
-
 ### 项目结构
 
 ```text
@@ -139,15 +254,22 @@ src/
   styles.css
   vault.html
   vault.js
+pic/
+  主界面.png
+  插件界面.png
 ```
 
 ---
 
 ## English
 
-A local-first Chrome / Edge browser extension that automatically backs up the currently visible ChatGPT conversation into browser IndexedDB, then lets you view, search, and export saved conversations.
+### Overview
 
-The default interface language is Chinese. You can switch between Chinese and English from the extension popup or the backup library.
+ChatGPT Local Backup is a local-first Chrome / Edge extension. It automatically backs up the currently visible ChatGPT conversation into browser IndexedDB, then lets you view, search, and export saved conversations.
+
+It is useful when you want to reduce the risk of losing important conversations because of account issues, accidental deletion, or missed manual exports.
+
+> By default, all data stays in your local browser profile and is not uploaded to any cloud service.
 
 ### Interface Preview
 
@@ -164,52 +286,84 @@ Backup library:
 - Watches `chatgpt.com` and `chat.openai.com` pages.
 - Automatically saves visible user messages and ChatGPT responses.
 - Updates the local draft while a ChatGPT response is still generating.
-- Opens a local backup library from the extension popup.
-- Lets you view, search, favorite, and delete local backup conversations.
+- Backs up loaded content when you open an old conversation manually.
+- Provides a local backup library for viewing, searching, favoriting, and deleting conversations.
 - Exports one conversation as Markdown or JSON.
 - Exports all local backups as Markdown or JSON.
 - Saves metadata for visible images, file links, and uploaded files.
-- Attempts to save locally accessible images from ChatGPT responses, including common GPT Image outputs.
+- Attempts to save locally accessible images from ChatGPT responses.
 - Can optionally back up uploaded file contents. This is off by default, with a 50MB per-file limit.
 - Supports Chinese and English UI, with Chinese as the default.
 - Does not read cookies, passwords, tokens, or browser history.
 - Does not call private ChatGPT APIs.
 - Does not automatically crawl old conversations in the background.
 
-### Install For Chrome
+### Download
 
-1. Open `chrome://extensions`.
-2. Enable `Developer mode`.
-3. Click `Load unpacked`.
-4. Select this project folder:
+#### Option 1: Download ZIP
+
+1. Open the GitHub project page:
 
    ```text
-   d:\chat_export\chatgpt-backup-extension
+   https://github.com/Yan-Haiyang-Tju/GPT-Export
    ```
 
-5. Open `https://chatgpt.com` and start or open a conversation.
-6. Click the extension icon to check status or open the backup library.
-7. Use the popup checkbox to pause or resume automatic local backup.
-8. Use the language selector to switch between Chinese and English.
+2. Click `Code`.
+3. Click `Download ZIP`.
+4. Unzip the downloaded file.
+5. Find the extracted project folder. It should contain:
+
+   ```text
+   manifest.json
+   src/
+   pic/
+   README.md
+   ```
+
+When loading the extension, select the folder that contains `manifest.json`.
+
+#### Option 2: Use Git
+
+```shell
+git clone https://github.com/Yan-Haiyang-Tju/GPT-Export.git
+cd GPT-Export
+```
+
+When loading the extension, select the `GPT-Export` folder.
+
+### Install For Chrome
+
+1. Open Chrome.
+2. Go to:
+
+   ```text
+   chrome://extensions
+   ```
+
+3. Enable `Developer mode`.
+4. Click `Load unpacked`.
+5. Select the downloaded or cloned project folder that contains `manifest.json`.
+6. Open `https://chatgpt.com` and start or open a conversation.
 
 ### Install For Edge
 
-1. Open `edge://extensions`.
-2. Enable `Developer mode`.
-3. Click `Load unpacked`.
-4. Select this project folder:
+1. Open Microsoft Edge.
+2. Go to:
 
    ```text
-   d:\chat_export\chatgpt-backup-extension
+   edge://extensions
    ```
 
-5. Open `https://chatgpt.com` and use the extension.
-6. Use the popup checkbox to pause or resume automatic local backup.
-7. Use the language selector to switch between Chinese and English.
+3. Enable `Developer mode`.
+4. Click `Load unpacked`.
+5. Select the downloaded or cloned project folder that contains `manifest.json`.
+6. Open `https://chatgpt.com` and use the extension.
 
 ### Usage
 
-After installation, open a ChatGPT conversation page and the extension will automatically back up the currently visible content. A small status badge appears in the lower-right corner, for example:
+#### 1. Start Auto Backup
+
+After installation, open a ChatGPT conversation page. A small status badge appears in the lower-right corner, for example:
 
 ```text
 Backup: watching
@@ -218,24 +372,90 @@ Backup: saved 6 messages
 Backup: saved 6 messages, 2 attachments
 ```
 
-You can also click the extension icon to:
+Auto-backup is enabled by default.
 
-- Check whether the current page is detected.
-- Click `Save now` manually.
-- Export the current conversation.
-- Open the backup library.
-- Pause or resume automatic backup.
-- Enable or disable `Back up my uploaded file contents`.
+#### 2. Check Extension Status
 
-### Image And File Backup
+Click the extension icon to see:
 
-This version supports three attachment features:
+- Whether the current page is detected.
+- Auto-backup switch.
+- Uploaded file content backup switch.
+- Local conversation, message, and attachment counts.
+- Latest backup time.
+- `Save now` button.
+- `Export current` button.
+- Button for opening the backup library.
 
-1. **Attachment metadata**: saves visible image metadata, file links, uploaded file names, types, and sizes by default.
-2. **Local copies of generated images**: if an image in a ChatGPT response can be fetched directly, the extension attempts to save it into local IndexedDB through the background fetch path.
-3. **Uploaded file content backup**: off by default. When enabled, the extension reads and saves file contents when you choose upload files. The per-file limit is 50MB.
+#### 3. Back Up Old Conversations
 
-Uploaded file content backup is intentionally disabled by default for privacy. You can turn it on or off from the extension popup.
+The extension does not crawl all old conversations in the background.  
+To back up an old conversation, open it manually and wait until its content is loaded.
+
+#### 4. Back Up Uploaded Files
+
+Uploaded file content backup is off by default.
+
+To save uploaded file contents:
+
+1. Click the extension icon.
+2. Enable `Back up my uploaded file contents`.
+3. Go back to ChatGPT and choose files to upload.
+
+Notes:
+
+- The per-file limit is 50MB.
+- If the switch is off, only file metadata such as name, size, and type is saved.
+- If you enable the switch after uploading a file, that file will not be read retroactively. Choose the file again if you want to save its content.
+
+#### 5. Open The Backup Library
+
+Click the arrow button in the extension popup to open the backup library.
+
+In the backup library, you can:
+
+- View all backed-up conversations.
+- Search conversations.
+- Favorite important conversations.
+- Delete local backups.
+- Download saved attachment copies.
+- Export one conversation as Markdown / JSON.
+- Export all conversations as Markdown / JSON.
+
+### Update To The Latest Version
+
+#### ZIP Users
+
+1. Open the GitHub project page.
+2. Click `Code` -> `Download ZIP` again.
+3. Unzip the new ZIP file.
+4. Go to `chrome://extensions` or `edge://extensions`.
+5. Click the reload button on the extension card.
+6. If you changed the extracted folder location, click `Load unpacked` again and select the new project folder.
+
+#### Git Users
+
+```shell
+cd GPT-Export
+git pull
+```
+
+Then go to `chrome://extensions` or `edge://extensions` and click the reload button on the extension card.
+
+### Uninstall And Clear Data
+
+To clear local backup data:
+
+1. Open the backup library.
+2. Click `Clear all`.
+
+To uninstall the extension:
+
+1. Open `chrome://extensions` or `edge://extensions`.
+2. Find `ChatGPT Local Backup`.
+3. Click `Remove`.
+
+> Uninstalling the extension may also remove its local browser data. Export JSON first if you need a permanent backup.
 
 ### Current Limits
 
@@ -245,6 +465,7 @@ Uploaded file content backup is intentionally disabled by default for privacy. Y
 - Page structure changes on ChatGPT may require updating `src/content.js`.
 - If a file download link requires account access or expires, the extension may only save metadata.
 - If an image requires extra account authorization, has expired, cannot be fetched directly, or is too large, the extension may only save metadata.
+- GPT Image outputs are not guaranteed to be saved as full local image copies yet.
 - Canvas content and voice data are not fully supported yet.
 
 ### Privacy Model
@@ -259,9 +480,7 @@ The extension does not read or save:
 - browser history
 - content from unrelated websites
 
-Uploaded file content backup is off by default. When enabled, the extension only reads file contents when you choose upload files, then stores them in the local IndexedDB of the current browser profile.
-
-To delete local data, open the backup library and click `Clear all`.
+Uploaded file content backup is off by default. When enabled, the extension only reads file contents when you choose files to upload, then stores them in the local IndexedDB of the current browser profile.
 
 ### Project Structure
 
@@ -278,4 +497,7 @@ src/
   styles.css
   vault.html
   vault.js
+pic/
+  主界面.png
+  插件界面.png
 ```
