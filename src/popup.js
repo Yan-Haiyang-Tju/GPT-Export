@@ -3,6 +3,8 @@
 
   const els = {
     autoBackupLabel: document.getElementById("autoBackupLabel"),
+    attachmentCount: document.getElementById("attachmentCount"),
+    attachmentLabel: document.getElementById("attachmentLabel"),
     conversationLabel: document.getElementById("conversationLabel"),
     conversationCount: document.getElementById("conversationCount"),
     currentPageHeading: document.getElementById("currentPageHeading"),
@@ -20,7 +22,10 @@
     pageTitle: document.getElementById("pageTitle"),
     popupSubtitle: document.getElementById("popupSubtitle"),
     popupTitle: document.getElementById("popupTitle"),
-    saveNow: document.getElementById("saveNow")
+    saveNow: document.getElementById("saveNow"),
+    uploadBackupEnabled: document.getElementById("uploadBackupEnabled"),
+    uploadBackupHint: document.getElementById("uploadBackupHint"),
+    uploadBackupLabel: document.getElementById("uploadBackupLabel")
   };
 
   let activeTab = null;
@@ -38,10 +43,13 @@
     els.languageLabel.textContent = t("language");
     els.currentPageHeading.textContent = t("currentPage");
     els.autoBackupLabel.textContent = t("autoBackupLabel");
+    els.uploadBackupLabel.textContent = t("uploadBackupLabel");
+    els.uploadBackupHint.textContent = t("uploadBackupHint");
     els.saveNow.textContent = t("saveNow");
     els.exportCurrent.textContent = t("exportCurrent");
     els.conversationLabel.textContent = t("conversations");
     els.messageLabel.textContent = t("messages");
+    els.attachmentLabel.textContent = t("attachments");
     els.lastBackupHeading.textContent = t("lastBackup");
     els.exportAllJson.textContent = t("exportAllJson");
     els.openVault.title = t("openBackupLibrary");
@@ -85,6 +93,7 @@
     const stats = await ChatBackupDB.getStats();
     els.conversationCount.textContent = String(stats.conversationCount);
     els.messageCount.textContent = String(stats.messageCount);
+    els.attachmentCount.textContent = String(stats.attachmentCount || 0);
     els.lastBackup.textContent = stats.latestBackupAt
       ? formatDate(stats.latestBackupAt)
       : t("noBackupsYet");
@@ -93,9 +102,11 @@
   async function loadSettings() {
     const settings = await chrome.storage.local.get({
       backupEnabled: true,
+      uploadBackupEnabled: false,
       locale: "zh"
     });
     els.backupEnabled.checked = Boolean(settings.backupEnabled);
+    els.uploadBackupEnabled.checked = Boolean(settings.uploadBackupEnabled);
     locale = ChatBackupI18n.normalizeLocale(settings.locale);
     applyLocale();
   }
@@ -182,6 +193,12 @@
     setStatus(els.backupEnabled.checked ? t("ready") : t("paused"), els.backupEnabled.checked ? "" : "warn");
   });
 
+  els.uploadBackupEnabled.addEventListener("change", async () => {
+    await chrome.storage.local.set({
+      uploadBackupEnabled: els.uploadBackupEnabled.checked
+    });
+  });
+
   els.localeSelect.addEventListener("change", async () => {
     locale = await ChatBackupI18n.setLocale(els.localeSelect.value);
     applyLocale();
@@ -190,7 +207,7 @@
   });
 
   els.saveNow.addEventListener("click", () => {
-    forceSave().catch(() => setStatus("Failed", "error"));
+    forceSave().catch(() => setStatus(t("failed"), "error"));
   });
 
   els.exportCurrent.addEventListener("click", () => {

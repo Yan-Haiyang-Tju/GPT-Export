@@ -10,7 +10,12 @@
   ],
   "host_permissions": [
     "https://chatgpt.com/*",
-    "https://chat.openai.com/*"
+    "https://chat.openai.com/*",
+    "https://*.amazonaws.com/*",
+    "https://*.blob.core.windows.net/*",
+    "https://*.oaiusercontent.com/*",
+    "https://*.oaistatic.com/*",
+    "https://*.openai.com/*"
   ],
   "background": {
     "service_worker": "src/service-worker.js"

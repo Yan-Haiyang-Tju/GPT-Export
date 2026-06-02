@@ -129,6 +129,35 @@
     return role || t("messageRole");
   }
 
+  function attachmentLabel(attachment) {
+    const state = attachment.savedLocally ? t("savedLocally") : t("metadataOnly");
+    const size = attachment.size ? ` · ${Math.ceil(attachment.size / 1024)} KB` : "";
+    return `${attachment.name || attachment.type || "attachment"} · ${state}${size}`;
+  }
+
+  function renderAttachment(attachment) {
+    const preview = attachment.type === "image" && attachment.dataUrl
+      ? `<img class="attachment-preview" src="${escapeHtml(attachment.dataUrl)}" alt="${escapeHtml(attachment.alt || attachment.name || "")}">`
+      : "";
+    const downloadButton = attachment.dataUrl
+      ? `<button class="download-attachment" data-id="${escapeHtml(attachment.id)}">${escapeHtml(t("download"))}</button>`
+      : "";
+    const urlLine = attachment.src
+      ? `<a href="${escapeHtml(attachment.src)}" target="_blank" rel="noreferrer">${escapeHtml(attachment.src)}</a>`
+      : "";
+
+    return `
+      <li class="attachment-item">
+        ${preview}
+        <div class="attachment-detail">
+          <strong>${escapeHtml(attachmentLabel(attachment))}</strong>
+          ${urlLine ? `<p class="small muted">${urlLine}</p>` : ""}
+        </div>
+        ${downloadButton}
+      </li>
+    `;
+  }
+
   async function renderConversation(conversationId) {
     const item = await ChatBackupDB.getConversation(conversationId);
 
@@ -142,16 +171,38 @@
 
     const conversation = item.conversation;
     const messages = item.messages || [];
+    const attachments = item.attachments || [];
+    const conversationAttachments = attachments.filter((attachment) => !attachment.messageId);
     const messageHtml = messages
       .map((message) => {
+        const attachmentHtml = message.attachments?.length
+          ? `
+            <ul class="attachment-list">
+              ${message.attachments.map((attachment) => renderAttachment(attachment)).join("")}
+            </ul>
+          `
+          : "";
         return `
           <article class="message">
             <div class="role">${escapeHtml(roleLabel(message.role))}</div>
-            <div class="message-content">${escapeHtml(message.content)}</div>
+            <div>
+              <div class="message-content">${escapeHtml(message.content)}</div>
+              ${attachmentHtml}
+            </div>
           </article>
         `;
       })
       .join("");
+    const conversationAttachmentHtml = conversationAttachments.length
+      ? `
+        <section class="conversation-attachments">
+          <h3>${escapeHtml(t("attachmentList"))}</h3>
+          <ul class="attachment-list">
+            ${conversationAttachments.map((attachment) => renderAttachment(attachment)).join("")}
+          </ul>
+        </section>
+      `
+      : "";
 
     els.reader.innerHTML = `
       <div class="reader-inner">
@@ -162,6 +213,7 @@
               <p class="small muted">
                 ${escapeHtml(t("lastBackupLabel"))}: ${escapeHtml(formatDate(conversation.lastBackupAt))} ·
                 ${messages.length} ${escapeHtml(t("messages"))} ·
+                ${attachments.length} ${escapeHtml(t("attachments"))} ·
                 ${escapeHtml(conversation.status || t("unknown"))}
               </p>
             </div>
@@ -172,10 +224,27 @@
               <button id="deleteConversation" class="danger">${escapeHtml(t("delete"))}</button>
             </div>
           </header>
-          <div class="message-list">${messageHtml || `<p class='small muted'>${escapeHtml(t("noBackupsYet"))}</p>`}</div>
+          <div class="message-list">
+            ${messageHtml || `<p class='small muted'>${escapeHtml(t("noBackupsYet"))}</p>`}
+            ${conversationAttachmentHtml}
+          </div>
         </section>
       </div>
     `;
+
+    els.reader.querySelectorAll(".download-attachment").forEach((button) => {
+      button.addEventListener("click", () => {
+        const attachment = attachments.find((entry) => entry.id === button.dataset.id);
+        if (!attachment?.dataUrl) {
+          return;
+        }
+        chrome.downloads.download({
+          url: attachment.dataUrl,
+          filename: ChatBackupExport.safeFilename(attachment.name || "attachment"),
+          saveAs: true
+        });
+      });
+    });
 
     document.getElementById("exportMarkdown").addEventListener("click", () => {
       ChatBackupExport.downloadMarkdown(`${ChatBackupExport.safeFilename(conversation.title)}.md`, item, locale);
@@ -211,7 +280,7 @@
     const stats = await ChatBackupDB.getStats();
     els.vaultStats.textContent = t("backupLibraryStats", {
       conversations: stats.conversationCount,
-      messages: stats.messageCount
+      messages: `${stats.messageCount}, ${stats.attachmentCount || 0} ${t("attachments")}`
     });
     renderList();
   }

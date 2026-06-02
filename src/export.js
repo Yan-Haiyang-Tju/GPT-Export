@@ -23,6 +23,7 @@
   function conversationToMarkdown(item, locale) {
     const conversation = item.conversation || {};
     const messages = item.messages || [];
+    const conversationAttachments = (item.attachments || []).filter((attachment) => !attachment.messageId);
     const i18n = global.ChatBackupI18n;
     const t = i18n
       ? (key, values) => i18n.t(locale || i18n.DEFAULT_LOCALE, key, values)
@@ -41,6 +42,28 @@
       lines.push(`## ${role}`);
       lines.push("");
       lines.push(message.content || "");
+      lines.push("");
+      if (message.attachments?.length) {
+        lines.push(`### ${t("attachmentList")}`);
+        lines.push("");
+        for (const attachment of message.attachments) {
+          const state = attachment.savedLocally ? t("savedLocally") : t("metadataOnly");
+          lines.push(`- ${attachment.name || attachment.type || "attachment"} (${attachment.type || "file"}, ${state})`);
+          if (attachment.src) {
+            lines.push(`  - URL: ${attachment.src}`);
+          }
+        }
+        lines.push("");
+      }
+    }
+
+    if (conversationAttachments.length) {
+      lines.push(`## ${t("attachmentList")}`);
+      lines.push("");
+      for (const attachment of conversationAttachments) {
+        const state = attachment.savedLocally ? t("savedLocally") : t("metadataOnly");
+        lines.push(`- ${attachment.name || attachment.type || "attachment"} (${attachment.type || "file"}, ${state})`);
+      }
       lines.push("");
     }
 

@@ -36,6 +36,11 @@
           <input id="backupEnabled" type="checkbox">
           <span id="autoBackupLabel">自动备份当前可见的 ChatGPT 会话</span>
         </label>
+        <label class="toggle-row">
+          <input id="uploadBackupEnabled" type="checkbox">
+          <span id="uploadBackupLabel">备份我上传的文件内容</span>
+        </label>
+        <p id="uploadBackupHint" class="small muted">默认关闭。开启后，插件会在你选择上传文件时保存文件内容，单个文件上限 50MB。</p>
         <div class="actions">
           <button id="saveNow" class="primary">立即保存</button>
           <button id="exportCurrent">导出当前</button>
@@ -50,6 +55,10 @@
         <div class="stat">
           <strong id="messageCount">0</strong>
           <span id="messageLabel" class="small muted">消息</span>
+        </div>
+        <div class="stat">
+          <strong id="attachmentCount">0</strong>
+          <span id="attachmentLabel" class="small muted">附件</span>
         </div>
       </section>
 

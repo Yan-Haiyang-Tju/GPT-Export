@@ -427,6 +427,49 @@ select {
   overflow-wrap: anywhere;
 }
 
+.attachment-list {
+  display: grid;
+  gap: 8px;
+  margin: 12px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.attachment-item {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #f8fafc;
+  padding: 8px;
+}
+
+.attachment-preview {
+  width: 64px;
+  height: 64px;
+  object-fit: cover;
+  border-radius: 7px;
+  border: 1px solid var(--line);
+  background: #fff;
+}
+
+.attachment-detail {
+  min-width: 0;
+}
+
+.attachment-detail strong,
+.attachment-detail a {
+  overflow-wrap: anywhere;
+}
+
+.conversation-attachments {
+  border-top: 1px solid var(--line);
+  margin-top: 16px;
+  padding-top: 16px;
+}
+
 .toast {
   position: fixed;
   right: 18px;

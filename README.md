@@ -19,6 +19,9 @@
 - 查看、搜索、收藏、删除本地备份会话。
 - 单个会话可导出为 Markdown 或 JSON。
 - 全部本地备份可批量导出为 Markdown 或 JSON。
+- 保存页面中可见图片、文件链接和上传文件的元信息。
+- 尝试把 ChatGPT 回复中可直接读取的图片保存成本地副本，包括常见 GPT Image 生成图。
+- 可选备份你上传的文件内容，默认关闭，单个文件上限 50MB。
 - 支持中文和英文界面，默认中文。
 - 不读取 cookies、密码、token 或浏览器历史记录。
 - 不调用 ChatGPT 私有接口。
@@ -63,6 +66,7 @@
 备份：监听中
 备份：保存中
 备份：已保存 6 条消息
+备份：已保存 6 条消息，2 个附件
 ```
 
 你也可以点击插件图标：
@@ -72,6 +76,17 @@
 - 导出当前会话。
 - 打开备份库。
 - 暂停或恢复自动备份。
+- 开启或关闭 `备份我上传的文件内容`。
+
+### 图片和文件备份
+
+当前版本支持三类附件能力：
+
+1. **附件元信息**：默认保存页面中可见图片、文件链接、上传文件的文件名、类型、大小等信息。
+2. **GPT 生成图片本地副本**：如果 ChatGPT 回复中的图片地址可直接读取，插件会尝试通过后台下载通道保存到本地 IndexedDB。
+3. **上传文件内容备份**：默认关闭。开启后，当你选择上传文件时，插件会读取并保存文件内容，单个文件上限 50MB。
+
+出于隐私考虑，上传文件内容备份不会默认开启。你可以在插件弹窗里手动打开或关闭。
 
 ### 当前限制
 
@@ -79,7 +94,9 @@
 - 历史会话需要你手动打开，且内容已经加载到页面中，插件才能备份。
 - 如果账号已经无法访问，且某些会话此前从未备份过，插件无法恢复这些内容。
 - ChatGPT 页面结构变化后，可能需要更新 `src/content.js`。
-- 第一版主要备份文本内容，暂不完整支持附件、图片、Canvas、语音等内容。
+- 文件下载链接如果需要账号权限或已经过期，插件可能只能保存元信息，无法保存文件内容。
+- 图片地址如果需要额外账号权限、已经过期、无法直接读取或文件过大，插件可能只能保存元信息。
+- Canvas、语音等内容暂不完整支持。
 
 ### 隐私说明
 
@@ -92,6 +109,8 @@
 - token
 - 浏览器历史记录
 - 其他网站内容
+
+上传文件内容备份默认关闭。开启后，插件只会在你选择上传文件时读取文件内容，并保存到当前浏览器本地 IndexedDB。
 
 如需删除本地数据，请打开备份库并点击 `清空全部`。
 
@@ -129,6 +148,9 @@ The default interface language is Chinese. You can switch between Chinese and En
 - Lets you view, search, favorite, and delete local backup conversations.
 - Exports one conversation as Markdown or JSON.
 - Exports all local backups as Markdown or JSON.
+- Saves metadata for visible images, file links, and uploaded files.
+- Attempts to save locally accessible images from ChatGPT responses, including common GPT Image outputs.
+- Can optionally back up uploaded file contents. This is off by default, with a 50MB per-file limit.
 - Supports Chinese and English UI, with Chinese as the default.
 - Does not read cookies, passwords, tokens, or browser history.
 - Does not call private ChatGPT APIs.
@@ -173,6 +195,7 @@ After installation, open a ChatGPT conversation page and the extension will auto
 Backup: watching
 Backup: saving
 Backup: saved 6 messages
+Backup: saved 6 messages, 2 attachments
 ```
 
 You can also click the extension icon to:
@@ -182,6 +205,17 @@ You can also click the extension icon to:
 - Export the current conversation.
 - Open the backup library.
 - Pause or resume automatic backup.
+- Enable or disable `Back up my uploaded file contents`.
+
+### Image And File Backup
+
+This version supports three attachment features:
+
+1. **Attachment metadata**: saves visible image metadata, file links, uploaded file names, types, and sizes by default.
+2. **Local copies of generated images**: if an image in a ChatGPT response can be fetched directly, the extension attempts to save it into local IndexedDB through the background fetch path.
+3. **Uploaded file content backup**: off by default. When enabled, the extension reads and saves file contents when you choose upload files. The per-file limit is 50MB.
+
+Uploaded file content backup is intentionally disabled by default for privacy. You can turn it on or off from the extension popup.
 
 ### Current Limits
 
@@ -189,7 +223,9 @@ You can also click the extension icon to:
 - It can back up old conversations only when you open them and their content is visible.
 - It does not recover conversations from a locked or banned account if they were never backed up.
 - Page structure changes on ChatGPT may require updating `src/content.js`.
-- This first version mainly backs up text content. Attachments, images, Canvas content, and voice data are not fully supported yet.
+- If a file download link requires account access or expires, the extension may only save metadata.
+- If an image requires extra account authorization, has expired, cannot be fetched directly, or is too large, the extension may only save metadata.
+- Canvas content and voice data are not fully supported yet.
 
 ### Privacy Model
 
@@ -202,6 +238,8 @@ The extension does not read or save:
 - tokens
 - browser history
 - content from unrelated websites
+
+Uploaded file content backup is off by default. When enabled, the extension only reads file contents when you choose upload files, then stores them in the local IndexedDB of the current browser profile.
 
 To delete local data, open the backup library and click `Clear all`.
 
